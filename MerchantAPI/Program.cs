@@ -15,8 +15,7 @@ builder.Services.AddDbContext<MerchantDbContext>(opt => opt.UseInMemoryDatabase(
 //builder.Services.AddDbContext<MerchantDbContext>(opt =>
 //{
   //  opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-//}); // OVA E ZA BAZA SHO NE E InMemory
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//}); // This is for using Database that is not InMemory
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

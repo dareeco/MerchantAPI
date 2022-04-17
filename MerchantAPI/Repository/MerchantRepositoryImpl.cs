@@ -15,51 +15,7 @@ namespace MerchantAPI.Repository
         {
             _merchantDbContext.Merchants.Add(merchant);
             _merchantDbContext.SaveChanges();
-        }
-
-        public void CreateStoreForMerchant(int id, Store store)
-        {
-            var merchantFromDatabase = _merchantDbContext.Merchants.FirstOrDefault(x => x.Id == id);
-         // if(merchantFromDatabase == null)
-            //{
-            //    return FileNotFoundException prashaj dali mozhi vaka
-           // }
-            _merchantDbContext.Stores.Add(store);
-            _merchantDbContext.SaveChanges();
-        }
-
-        public bool DeleteMerchant(int id)
-        {
-            var merchantFromDatabase = _merchantDbContext.Merchants.FirstOrDefault(x => x.Id == id);
-            //Nov ponuden nachin od Visual Studio, treba da e isto. ako pagja meni so _merchantDbContext.Merchants.Where(x => x.Id ==id).FirstOrDefault()
-
-            if (merchantFromDatabase == null)
-            {
-                return false;
-            }
-            _merchantDbContext.Merchants.Remove(merchantFromDatabase);
-            _merchantDbContext.SaveChanges();
-            return true;
-        }
-
-        public bool deleteStore(int id)
-        {
-            var storeFromDatabase = _merchantDbContext.Stores.FirstOrDefault(s => s.Id == id);
-            if (storeFromDatabase == null)
-            {
-                return false;
-            }
-            _merchantDbContext.Stores.Remove(storeFromDatabase);
-            _merchantDbContext.SaveChanges();
-            return true;
-        }
-
-        public Merchant GetMerchant(int id)
-        {
-            var merchant = _merchantDbContext.Merchants.Where(x => x.Id == id).FirstOrDefault();//da go najdi toj so id
-            return merchant;
-        }
-
+        } 
         public MerchantResponse GetMerchants(int page, string? merchantCode)
         {
             var defaultPageSize = 10f;
@@ -81,13 +37,6 @@ namespace MerchantAPI.Repository
             };
             return merchantResponse;
         }
-
-        public Store GetStore(int id)
-        {
-            var store = _merchantDbContext.Stores.FirstOrDefault(s => s.Id == id);
-            return store;
-        }
-
         public StoreResponse GetStores(int page, string? storeCode, string? merchantCode)
         {
             var defaultPageSize = 10f;
@@ -118,48 +67,6 @@ namespace MerchantAPI.Repository
             };
             return storeResponse;
         }
-
-        public bool UpdateMerchant(int id, Merchant merchant)
-        {
-            var merchantFromDatabase = _merchantDbContext.Merchants.Where(x => x.Id == id).FirstOrDefault();   //go bara so to id
-
-            if (merchantFromDatabase == null)
-            {
-                return false; //ako ne postoi merchant so to id
-            }
-
-            merchantFromDatabase.merchantCode = merchant.merchantCode;
-            merchantFromDatabase.merchantName = merchant.merchantName;
-            merchantFromDatabase.fullName = merchant.fullName;
-            merchantFromDatabase.email = merchant.email;
-            merchantFromDatabase.website = merchant.website;
-            merchantFromDatabase.telephone = merchant.telephone;
-            merchantFromDatabase.address = merchant.address;
-            merchantFromDatabase.city = merchant.city;
-            merchantFromDatabase.accountNumber = merchant.accountNumber;//gi updejtira atributite so novite atribute
-                                                                         
-
-            _merchantDbContext.SaveChanges();
-            return true;
-        }
-
-        public bool UpdateStore(int id, Store store)
-        {
-            var storeFromDatabase = _merchantDbContext.Stores.Where(x => x.Id == id).FirstOrDefault();
-            if (storeFromDatabase == null)
-            {
-                return false;
-            }
-            storeFromDatabase.storeCode = store.storeCode;
-            storeFromDatabase.phone = store.phone;
-            storeFromDatabase.name = store.name;
-            storeFromDatabase.address = store.address;
-            storeFromDatabase.description = store.description;
-            storeFromDatabase.city = store.city;
-            storeFromDatabase.email = store.email;
-            return true;
-        }
-
         public bool UpdateStoreCode(string storeCode, Store store)
         {
             var storeFromDatabase = _merchantDbContext.Stores.Where(x => x.storeCode == storeCode).FirstOrDefault();

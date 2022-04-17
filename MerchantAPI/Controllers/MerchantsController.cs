@@ -29,7 +29,7 @@ namespace MerchantAPI.Controllers
         [HttpPost]
         public ActionResult CreateMerchant([FromBody] Merchant merchant)
         {
-            _merchantRepository.CreateMerchant(merchant); //go kreira so metodot v repo
+            _merchantRepository.CreateMerchant(merchant); //Merchant is created by the method in the repositorium
             return Ok();
         }
        
@@ -40,10 +40,10 @@ namespace MerchantAPI.Controllers
             var merchant = _merchantRepository.GetMerchantCode(merchantCode);
             if (merchant == null)
             {
-                return NotFound(); //ne postoi merchant so to id
+                return NotFound(); //Merchant with that merchantCode doesn't exist
             }
 
-            return Ok();
+            return Ok(merchant);
         }
 
         [HttpPut("{merchantCode}")]
@@ -77,7 +77,7 @@ namespace MerchantAPI.Controllers
             var merchant = _merchantRepository.GetMerchantCode(merchantCode);
             if (merchant == null)
             {
-                return NotFound(); //ne postoi merchant so toj code
+                return NotFound(); //Merchant with that merchantCode doesn't exist
             }
             if (!page.HasValue || page == 0)
             {
@@ -85,7 +85,7 @@ namespace MerchantAPI.Controllers
             }
 
             return _merchantRepository.GetStores(page.Value, storeCode, merchantCode);
-            //return _merchantRepository.GetStores(page.Value, storeCode);
+            //return _merchantRepository.GetStores(page.Value, storeCode); I also need merchantCode, to find stores for given merchant
         }
 
         [HttpPost("{merchantCode}/stores")]
@@ -94,9 +94,9 @@ namespace MerchantAPI.Controllers
             var merchant = _merchantRepository.GetMerchantCode(merchantCode);
             if (merchant == null)
             {
-                return NotFound(); //ne postoi merchant so to id
+                return NotFound(); //Merchant with that merchantCode doesn't exist
             }
-            _merchantRepository.CreateStoreForMerchantCode(merchantCode, store); //ako postoi kreiraj prodavnica
+            _merchantRepository.CreateStoreForMerchantCode(merchantCode, store); //If merchant exist, create store for him
             return Ok();
         }
 
@@ -107,14 +107,14 @@ namespace MerchantAPI.Controllers
             if(merchant == null)
             {
                 return NotFound();
-            } //dokolku ne provervam dali postoi merchant za toj code so nevaliden code za merchant kje mozhi da se pristapuva
-            //store-to sho ne e tochno i ne treba
+            } //If i don't check if there is a merchant with that merchantCode, with invalid merchantCode you can access stores- like he exists
+            
             var store = _merchantRepository.GetStoreCode(storeCode);
             if (store == null)
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(store);
         }
         [HttpPut("{merchantCode}/stores/{storeCode}")]
         public ActionResult UpdateStore([FromRoute] string merchantCode,[FromRoute] string storeCode, [FromBody] Store store)
